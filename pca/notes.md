@@ -107,6 +107,8 @@ This is done via:
 X_projected = X_centered @ W_small  # shape: (65536, k)
 ```
 
+this x_projected is projection on the dual space, coz we are avoiding billions of calculations of original space.
+
 Note: This works under dual PCA because we're treating each image as a random variable.
 The matrix multiplication acts as both eigenface computation and projection step.  
 For each pixel as a random variable, this gives the projection of each image onto the k eigenfaces and then we can reconstruct the images. as the notes commented out below
@@ -143,6 +145,8 @@ We then reshape each row of X_reconstructed into 64×64 to visualize the reconst
 | ------------------------------ | --------------------------------- | -------------------------------------------------------- |
 | X_centered @ W_small           | Compute eigenfaces in pixel space | Projects small eigenvectors to high-dimensional space    |
 | X_projected @ W_small.T + mean | Reconstruct images                | Combines k eigenfaces back to approximate original image |
+
+The key insight is that you're computing covariance between images (samples) rather than between pixels (features), which gives you a manageable 25×25 matrix instead of a 65536×65536 monster. Your variable x_projected correctly represents the projection of pixel data onto the dual principal components, staying within the dual PCA framework throughout.
 
 <!-- Notes by claude not sure about correctness, it is for pixel as a random variable -->
 
